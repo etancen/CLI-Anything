@@ -28,8 +28,8 @@ def search_campaigns_group(ctx):
     """search-campaigns resource commands."""
 
 @search_campaigns_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--query", "query", default=None, help="The search query used to filter results.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context

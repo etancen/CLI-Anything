@@ -28,10 +28,10 @@ def campaign_folders_group(ctx):
     """campaign-folders resource commands."""
 
 @campaign_folders_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_(ctx, fields, exclude_fields, count, offset, extra_params):
@@ -98,8 +98,8 @@ def _cmd_delete(ctx, folder_id, extra_params):
 
 @campaign_folders_group.command("get")
 @click.argument("FOLDER_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, folder_id, fields, exclude_fields, extra_params):

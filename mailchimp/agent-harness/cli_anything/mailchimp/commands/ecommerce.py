@@ -28,14 +28,14 @@ def ecommerce_group(ctx):
     """ecommerce resource commands."""
 
 @ecommerce_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--campaign-id", "campaign_id", default=None, help="Restrict results to orders with a specific `campaign_id` value.")
 @click.option("--outreach-id", "outreach_id", default=None, help="Restrict results to orders with a specific `outreach_id` value.")
 @click.option("--customer-id", "customer_id", default=None, help="Restrict results to orders made by a specific customer.")
-@click.option("--has-outreach", "has_outreach", default=None, type=bool, help="Restrict results to orders that have an outreach attached. For example, an email")
+@click.option("--has-outreach", "has_outreach", default=None, type=bool, help="Restrict results to orders that have an outreach attached. For example, an email campaign or Facebook ad.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_(ctx, fields, exclude_fields, count, offset, campaign_id, outreach_id, customer_id, has_outreach, extra_params):
@@ -64,10 +64,10 @@ def _cmd_list_(ctx, fields, exclude_fields, count, offset, campaign_id, outreach
     _out(result)
 
 @ecommerce_group.command("list-ecommerce-stores")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores(ctx, fields, exclude_fields, count, offset, extra_params):
@@ -134,8 +134,8 @@ def _cmd_delete(ctx, store_id, extra_params):
 
 @ecommerce_group.command("get")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, store_id, fields, exclude_fields, extra_params):
@@ -181,10 +181,10 @@ def _cmd_update(ctx, store_id, data, extra_params):
 
 @ecommerce_group.command("list-ecommerce-stores-id-carts")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_carts(ctx, store_id, fields, exclude_fields, count, offset, extra_params):
@@ -254,8 +254,8 @@ def _cmd_delete_ecommerce_stores_id_carts_id(ctx, store_id, cart_id, extra_param
 @ecommerce_group.command("get-ecommerce-stores-id-carts-id")
 @click.argument("STORE_ID")
 @click.argument("CART_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_carts_id(ctx, store_id, cart_id, fields, exclude_fields, extra_params):
@@ -303,10 +303,10 @@ def _cmd_update_ecommerce_stores_id_carts_id(ctx, store_id, cart_id, data, extra
 @ecommerce_group.command("list-ecommerce-stores-id-carts-id-lines")
 @click.argument("STORE_ID")
 @click.argument("CART_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_carts_id_lines(ctx, store_id, cart_id, fields, exclude_fields, count, offset, extra_params):
@@ -379,8 +379,8 @@ def _cmd_delete_ecommerce_stores_id_carts_lines_id(ctx, store_id, cart_id, line_
 @click.argument("STORE_ID")
 @click.argument("CART_ID")
 @click.argument("LINE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_carts_id_lines_id(ctx, store_id, cart_id, line_id, fields, exclude_fields, extra_params):
@@ -428,10 +428,10 @@ def _cmd_update_ecommerce_stores_id_carts_id_lines_id(ctx, store_id, cart_id, li
 
 @ecommerce_group.command("list-ecommerce-stores-id-customers")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--email-address", "email_address", default=None, help="Restrict the response to customers with the email address.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
@@ -503,8 +503,8 @@ def _cmd_delete_ecommerce_stores_id_customers_id(ctx, store_id, customer_id, ext
 @ecommerce_group.command("get-ecommerce-stores-id-customers-id")
 @click.argument("STORE_ID")
 @click.argument("CUSTOMER_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_customers_id(ctx, store_id, customer_id, fields, exclude_fields, extra_params):
@@ -574,12 +574,12 @@ def _cmd_update_3(ctx, store_id, customer_id, data, extra_params):
 
 @ecommerce_group.command("list-ecommerce-stores-id-orders")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--customer-id", "customer_id", default=None, help="Restrict results to orders made by a specific customer.")
-@click.option("--has-outreach", "has_outreach", default=None, type=bool, help="Restrict results to orders that have an outreach attached. For example, an email")
+@click.option("--has-outreach", "has_outreach", default=None, type=bool, help="Restrict results to orders that have an outreach attached. For example, an email campaign or Facebook ad.")
 @click.option("--campaign-id", "campaign_id", default=None, help="Restrict results to orders with a specific `campaign_id` value.")
 @click.option("--outreach-id", "outreach_id", default=None, help="Restrict results to orders with a specific `outreach_id` value.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
@@ -655,8 +655,8 @@ def _cmd_delete_ecommerce_stores_id_orders_id(ctx, store_id, order_id, extra_par
 @ecommerce_group.command("get-ecommerce-stores-id-orders-id")
 @click.argument("STORE_ID")
 @click.argument("ORDER_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_orders_id(ctx, store_id, order_id, fields, exclude_fields, extra_params):
@@ -727,10 +727,10 @@ def _cmd_update_4(ctx, store_id, order_id, data, extra_params):
 @ecommerce_group.command("list-ecommerce-stores-id-orders-id-lines")
 @click.argument("STORE_ID")
 @click.argument("ORDER_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_orders_id_lines(ctx, store_id, order_id, fields, exclude_fields, count, offset, extra_params):
@@ -803,8 +803,8 @@ def _cmd_delete_ecommerce_stores_id_orders_id_lines_id(ctx, store_id, order_id, 
 @click.argument("STORE_ID")
 @click.argument("ORDER_ID")
 @click.argument("LINE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_orders_id_lines_id(ctx, store_id, order_id, line_id, fields, exclude_fields, extra_params):
@@ -852,10 +852,10 @@ def _cmd_update_ecommerce_stores_id_orders_id_lines_id(ctx, store_id, order_id, 
 
 @ecommerce_group.command("list-ecommerce-stores-id-products")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_products(ctx, store_id, fields, exclude_fields, count, offset, extra_params):
@@ -925,8 +925,8 @@ def _cmd_delete_ecommerce_stores_id_products_id(ctx, store_id, product_id, extra
 @ecommerce_group.command("get-ecommerce-stores-id-products-id")
 @click.argument("STORE_ID")
 @click.argument("PRODUCT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_products_id(ctx, store_id, product_id, fields, exclude_fields, extra_params):
@@ -997,10 +997,10 @@ def _cmd_update_5(ctx, store_id, product_id, data, extra_params):
 @ecommerce_group.command("list-ecommerce-stores-id-products-id-images")
 @click.argument("STORE_ID")
 @click.argument("PRODUCT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_products_id_images(ctx, store_id, product_id, fields, exclude_fields, count, offset, extra_params):
@@ -1073,8 +1073,8 @@ def _cmd_delete_ecommerce_stores_id_products_id_images_id(ctx, store_id, product
 @click.argument("STORE_ID")
 @click.argument("PRODUCT_ID")
 @click.argument("IMAGE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_products_id_images_id(ctx, store_id, product_id, image_id, fields, exclude_fields, extra_params):
@@ -1123,10 +1123,10 @@ def _cmd_update_ecommerce_stores_id_products_id_images_id(ctx, store_id, product
 @ecommerce_group.command("list-ecommerce-stores-id-products-id-variants")
 @click.argument("STORE_ID")
 @click.argument("PRODUCT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_products_id_variants(ctx, store_id, product_id, fields, exclude_fields, count, offset, extra_params):
@@ -1199,8 +1199,8 @@ def _cmd_delete_ecommerce_stores_id_products_id_variants_id(ctx, store_id, produ
 @click.argument("STORE_ID")
 @click.argument("PRODUCT_ID")
 @click.argument("VARIANT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_products_id_variants_id(ctx, store_id, product_id, variant_id, fields, exclude_fields, extra_params):
@@ -1272,10 +1272,10 @@ def _cmd_update_6(ctx, store_id, product_id, variant_id, data, extra_params):
 
 @ecommerce_group.command("list-ecommerce-stores-id-promorules")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_promorules(ctx, store_id, fields, exclude_fields, count, offset, extra_params):
@@ -1345,8 +1345,8 @@ def _cmd_delete_ecommerce_stores_id_promorules_id(ctx, store_id, promo_rule_id, 
 @ecommerce_group.command("get-ecommerce-stores-id-promorules-id")
 @click.argument("STORE_ID")
 @click.argument("PROMO_RULE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_promorules_id(ctx, store_id, promo_rule_id, fields, exclude_fields, extra_params):
@@ -1394,10 +1394,10 @@ def _cmd_update_ecommerce_stores_id_promorules_id(ctx, store_id, promo_rule_id, 
 @ecommerce_group.command("list-ecommerce-stores-id-promocodes")
 @click.argument("PROMO_RULE_ID")
 @click.argument("STORE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_ecommerce_stores_id_promocodes(ctx, promo_rule_id, store_id, fields, exclude_fields, count, offset, extra_params):
@@ -1470,8 +1470,8 @@ def _cmd_delete_ecommerce_stores_id_promocodes_id(ctx, store_id, promo_rule_id, 
 @click.argument("STORE_ID")
 @click.argument("PROMO_RULE_ID")
 @click.argument("PROMO_CODE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_ecommerce_stores_id_promocodes_id(ctx, store_id, promo_rule_id, promo_code_id, fields, exclude_fields, extra_params):

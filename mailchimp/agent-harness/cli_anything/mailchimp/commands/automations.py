@@ -29,13 +29,13 @@ def automations_group(ctx):
 
 @automations_group.command("list")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
-@click.option("--before-create-time", "before_create_time", default=None, help="Restrict the response to automations created before this time. Uses the ISO 8601")
-@click.option("--since-create-time", "since_create_time", default=None, help="Restrict the response to automations created after this time. Uses the ISO 8601 ")
-@click.option("--before-start-time", "before_start_time", default=None, help="Restrict the response to automations started before this time. Uses the ISO 8601")
-@click.option("--since-start-time", "since_start_time", default=None, help="Restrict the response to automations started after this time. Uses the ISO 8601 ")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
+@click.option("--before-create-time", "before_create_time", default=None, help="Restrict the response to automations created before this time. Uses the ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-create-time", "since_create_time", default=None, help="Restrict the response to automations created after this time. Uses the ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-start-time", "before_start_time", default=None, help="Restrict the response to automations started before this time. Uses the ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-start-time", "since_start_time", default=None, help="Restrict the response to automations started after this time. Uses the ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
 @click.option("--status", "status", default=None, help="Restrict the results to automations with the specified status.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
@@ -88,8 +88,8 @@ def _cmd_create(ctx, data, extra_params):
 
 @automations_group.command("get")
 @click.argument("WORKFLOW_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, workflow_id, fields, exclude_fields, extra_params):

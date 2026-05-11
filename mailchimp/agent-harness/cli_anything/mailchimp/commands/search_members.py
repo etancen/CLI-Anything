@@ -28,9 +28,9 @@ def search_members_group(ctx):
     """search-members resource commands."""
 
 @search_members_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
-@click.option("--query", "query", default=None, help="The search query used to filter results. Query should be a valid email, or a str")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
+@click.option("--query", "query", default=None, help="The search query used to filter results. Query should be a valid email, or a string representing a contact's first or last name.")
 @click.option("--list-id", "list_id", default=None, help="The unique id for the list.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context

@@ -28,10 +28,10 @@ def conversations_group(ctx):
     """conversations resource commands."""
 
 @conversations_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--has-unread-messages", "has_unread_messages", default=None, help="Whether the conversation has any unread messages.")
 @click.option("--list-id", "list_id", default=None, help="The unique id for the list.")
 @click.option("--campaign-id", "campaign_id", default=None, help="The unique id for the campaign.")
@@ -63,8 +63,8 @@ def _cmd_list_(ctx, fields, exclude_fields, count, offset, has_unread_messages, 
 
 @conversations_group.command("get")
 @click.argument("CONVERSATION_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, conversation_id, fields, exclude_fields, extra_params):
@@ -88,11 +88,11 @@ def _cmd_get(ctx, conversation_id, fields, exclude_fields, extra_params):
 
 @conversations_group.command("list-conversations-id-messages")
 @click.argument("CONVERSATION_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--is-read", "is_read", default=None, help="Whether a conversation message has been marked as read.")
-@click.option("--before-timestamp", "before_timestamp", default=None, help="Restrict the response to messages created before the set time. Uses ISO 8601 tim")
-@click.option("--since-timestamp", "since_timestamp", default=None, help="Restrict the response to messages created after the set time. Uses ISO 8601 time")
+@click.option("--before-timestamp", "before_timestamp", default=None, help="Restrict the response to messages created before the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-timestamp", "since_timestamp", default=None, help="Restrict the response to messages created after the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_conversations_id_messages(ctx, conversation_id, fields, exclude_fields, is_read, before_timestamp, since_timestamp, extra_params):
@@ -120,8 +120,8 @@ def _cmd_list_conversations_id_messages(ctx, conversation_id, fields, exclude_fi
 @conversations_group.command("get-conversations-id-messages-id")
 @click.argument("CONVERSATION_ID")
 @click.argument("MESSAGE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_conversations_id_messages_id(ctx, conversation_id, message_id, fields, exclude_fields, extra_params):

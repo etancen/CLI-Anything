@@ -28,19 +28,19 @@ def lists_group(ctx):
     """lists resource commands."""
 
 @lists_group.command("list")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
-@click.option("--before-date-created", "before_date_created", default=None, help="Restrict response to lists created before the set date. Uses ISO 8601 time forma")
-@click.option("--since-date-created", "since_date_created", default=None, help="Restrict results to lists created after the set date. Uses ISO 8601 time format:")
-@click.option("--before-campaign-last-sent", "before_campaign_last_sent", default=None, help="Restrict results to lists created before the last campaign send date. Uses ISO 8")
-@click.option("--since-campaign-last-sent", "since_campaign_last_sent", default=None, help="Restrict results to lists created after the last campaign send date. Uses ISO 86")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
+@click.option("--before-date-created", "before_date_created", default=None, help="Restrict response to lists created before the set date. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-date-created", "since_date_created", default=None, help="Restrict results to lists created after the set date. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-campaign-last-sent", "before_campaign_last_sent", default=None, help="Restrict results to lists created before the last campaign send date. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-campaign-last-sent", "since_campaign_last_sent", default=None, help="Restrict results to lists created after the last campaign send date. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
 @click.option("--email", "email", default=None, help="Restrict results to lists that include a specific subscriber's email address.")
 @click.option("--sort-field", "sort_field", default=None, help="Returns files sorted by the specified field.")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
-@click.option("--has-ecommerce-store", "has_ecommerce_store", default=None, type=bool, help="Restrict results to lists that contain an active, connected, undeleted ecommerce")
-@click.option("--include-total-contacts", "include_total_contacts", default=None, type=bool, help="Return the total_contacts field in the stats response, which contains an approxi")
+@click.option("--has-ecommerce-store", "has_ecommerce_store", default=None, type=bool, help="Restrict results to lists that contain an active, connected, undeleted ecommerce store.")
+@click.option("--include-total-contacts", "include_total_contacts", default=None, type=bool, help="Return the total_contacts field in the stats response, which contains an approximate count of all contacts in any state.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_(ctx, fields, exclude_fields, count, offset, before_date_created, since_date_created, before_campaign_last_sent, since_campaign_last_sent, email, sort_field, sort_dir, has_ecommerce_store, include_total_contacts, extra_params):
@@ -116,9 +116,9 @@ def _cmd_delete(ctx, list_id, extra_params):
 
 @lists_group.command("get")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
-@click.option("--include-total-contacts", "include_total_contacts", default=None, type=bool, help="Return the total_contacts field in the stats response, which contains an approxi")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
+@click.option("--include-total-contacts", "include_total_contacts", default=None, type=bool, help="Return the total_contacts field in the stats response, which contains an approximate count of all contacts in any state.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, list_id, fields, exclude_fields, include_total_contacts, extra_params):
@@ -166,8 +166,8 @@ def _cmd_update(ctx, list_id, data, extra_params):
 @lists_group.command("create-lists-id")
 @click.argument("LIST_ID")
 @click.option("--data", default=None, help="Request body as JSON string.")
-@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge fie")
-@click.option("--skip-duplicate-check", "skip_duplicate_check", default=None, type=bool, help="If skip_duplicate_check is true, we will ignore duplicates sent in the request w")
+@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.")
+@click.option("--skip-duplicate-check", "skip_duplicate_check", default=None, type=bool, help="If skip_duplicate_check is true, we will ignore duplicates sent in the request when using the batch sub/unsub on the lists endpoint. The status of the first appearance in the request will be saved. This defaults to false.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_create_lists_id(ctx, list_id, data, skip_merge_validation, skip_duplicate_check, extra_params):
@@ -192,10 +192,10 @@ def _cmd_create_lists_id(ctx, list_id, data, skip_merge_validation, skip_duplica
 
 @lists_group.command("list-lists-id-abuse-reports")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_abuse_reports(ctx, list_id, fields, exclude_fields, count, offset, extra_params):
@@ -222,10 +222,10 @@ def _cmd_list_lists_id_abuse_reports(ctx, list_id, fields, exclude_fields, count
 @lists_group.command("get-lists-id-abuse-reports-id")
 @click.argument("LIST_ID")
 @click.argument("REPORT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_abuse_reports_id(ctx, list_id, report_id, fields, exclude_fields, count, offset, extra_params):
@@ -252,9 +252,9 @@ def _cmd_get_lists_id_abuse_reports_id(ctx, list_id, report_id, fields, exclude_
 @lists_group.command("list-lists-id-activity")
 @click.argument("LIST_ID")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_activity(ctx, list_id, count, offset, fields, exclude_fields, extra_params):
@@ -280,8 +280,8 @@ def _cmd_list_lists_id_activity(ctx, list_id, count, offset, fields, exclude_fie
 
 @lists_group.command("list-lists-id-clients")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_clients(ctx, list_id, fields, exclude_fields, extra_params):
@@ -305,10 +305,10 @@ def _cmd_list_lists_id_clients(ctx, list_id, fields, exclude_fields, extra_param
 
 @lists_group.command("list-lists-id-growth-history")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--sort-field", "sort_field", default=None, help="Returns files sorted by the specified field.")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
@@ -339,8 +339,8 @@ def _cmd_list_lists_id_growth_history(ctx, list_id, fields, exclude_fields, coun
 @lists_group.command("get-lists-id-growth-history-id")
 @click.argument("LIST_ID")
 @click.argument("MONTH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_growth_history_id(ctx, list_id, month, fields, exclude_fields, extra_params):
@@ -364,12 +364,12 @@ def _cmd_get_lists_id_growth_history_id(ctx, list_id, month, fields, exclude_fie
 
 @lists_group.command("list-lists-id-interest-categories")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--type", "type_", default=None, help="Restrict results a type of interest group")
-@click.option("--sort-field", "sort_field", default=None, help="Returns interest categories sorted by the specified field. Defaults to display_o")
+@click.option("--sort-field", "sort_field", default=None, help="Returns interest categories sorted by the specified field. Defaults to display_order.")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
@@ -443,8 +443,8 @@ def _cmd_delete_lists_id_interest_categories_id(ctx, list_id, interest_category_
 @lists_group.command("get-lists-id-interest-categories-id")
 @click.argument("LIST_ID")
 @click.argument("INTEREST_CATEGORY_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_interest_categories_id(ctx, list_id, interest_category_id, fields, exclude_fields, extra_params):
@@ -492,10 +492,10 @@ def _cmd_update_lists_id_interest_categories_id(ctx, list_id, interest_category_
 @lists_group.command("list-lists-id-interest-categories-id-interests")
 @click.argument("LIST_ID")
 @click.argument("INTEREST_CATEGORY_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_interest_categories_id_interests(ctx, list_id, interest_category_id, fields, exclude_fields, count, offset, extra_params):
@@ -568,8 +568,8 @@ def _cmd_delete_lists_id_interest_categories_id_interests_id(ctx, list_id, inter
 @click.argument("LIST_ID")
 @click.argument("INTEREST_CATEGORY_ID")
 @click.argument("INTEREST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_interest_categories_id_interests_id(ctx, list_id, interest_category_id, interest_id, fields, exclude_fields, extra_params):
@@ -617,8 +617,8 @@ def _cmd_update_lists_id_interest_categories_id_interests_id(ctx, list_id, inter
 
 @lists_group.command("list-lists-id-locations")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_locations(ctx, list_id, fields, exclude_fields, extra_params):
@@ -642,25 +642,25 @@ def _cmd_list_lists_id_locations(ctx, list_id, fields, exclude_fields, extra_par
 
 @lists_group.command("list-lists-id-members")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--email-type", "email_type", default=None, help="The email type.")
 @click.option("--status", "status", default=None, help="The subscriber's status.")
-@click.option("--since-timestamp-opt", "since_timestamp_opt", default=None, help="Restrict results to subscribers who opted-in after the set timeframe. Uses ISO 8")
-@click.option("--before-timestamp-opt", "before_timestamp_opt", default=None, help="Restrict results to subscribers who opted-in before the set timeframe. Uses ISO ")
-@click.option("--since-last-changed", "since_last_changed", default=None, help="Restrict results to subscribers whose information changed after the set timefram")
-@click.option("--before-last-changed", "before_last_changed", default=None, help="Restrict results to subscribers whose information changed before the set timefra")
+@click.option("--since-timestamp-opt", "since_timestamp_opt", default=None, help="Restrict results to subscribers who opted-in after the set timeframe. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-timestamp-opt", "before_timestamp_opt", default=None, help="Restrict results to subscribers who opted-in before the set timeframe. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--since-last-changed", "since_last_changed", default=None, help="Restrict results to subscribers whose information changed after the set timeframe. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-last-changed", "before_last_changed", default=None, help="Restrict results to subscribers whose information changed before the set timeframe. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
 @click.option("--unique-email-id", "unique_email_id", default=None, help="A unique identifier for the email address across all Mailchimp lists.")
-@click.option("--vip-only", "vip_only", default=None, type=bool, help="A filter to return only the list's VIP members. Passing `true` will restrict res")
+@click.option("--vip-only", "vip_only", default=None, type=bool, help="A filter to return only the list's VIP members. Passing `true` will restrict results to VIP list members, passing `false` will return all list members.")
 @click.option("--interest-category-id", "interest_category_id", default=None, help="The unique id for the interest category.")
-@click.option("--interest-ids", "interest_ids", default=None, help="Used to filter list members by interests. Must be accompanied by interest_catego")
-@click.option("--interest-match", "interest_match", default=None, help="Used to filter list members by interests. Must be accompanied by interest_catego")
+@click.option("--interest-ids", "interest_ids", default=None, help="Used to filter list members by interests. Must be accompanied by interest_category_id and interest_match. The value must be a comma separated list of interest ids present for any supplied interest categories.")
+@click.option("--interest-match", "interest_match", default=None, help="Used to filter list members by interests. Must be accompanied by interest_category_id and interest_ids. \"any\" will match a member with any of the interest supplied, \"all\" will only match members with every interest supplied, and \"none\" will match members without any of the interest supplied.")
 @click.option("--sort-field", "sort_field", default=None, help="Returns files sorted by the specified field.")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
-@click.option("--since-last-campaign", "since_last_campaign", default=None, type=bool, help="Filter subscribers by those subscribed/unsubscribed/pending/cleaned since last e")
-@click.option("--unsubscribed-since", "unsubscribed_since", default=None, help="Filter subscribers by those unsubscribed since a specific date. Using any status")
+@click.option("--since-last-campaign", "since_last_campaign", default=None, type=bool, help="Filter subscribers by those subscribed/unsubscribed/pending/cleaned since last email campaign send. Member status is required to use this filter.")
+@click.option("--unsubscribed-since", "unsubscribed_since", default=None, help="Filter subscribers by those unsubscribed since a specific date. Using any status other than unsubscribed with this filter will result in an error.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_members(ctx, list_id, fields, exclude_fields, count, offset, email_type, status, since_timestamp_opt, before_timestamp_opt, since_last_changed, before_last_changed, unique_email_id, vip_only, interest_category_id, interest_ids, interest_match, sort_field, sort_dir, since_last_campaign, unsubscribed_since, extra_params):
@@ -702,7 +702,7 @@ def _cmd_list_lists_id_members(ctx, list_id, fields, exclude_fields, count, offs
 @lists_group.command("create-lists-id-members")
 @click.argument("LIST_ID")
 @click.option("--data", default=None, help="Request body as JSON string.")
-@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge fie")
+@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_create_lists_id_members(ctx, list_id, data, skip_merge_validation, extra_params):
@@ -750,8 +750,8 @@ def _cmd_delete_lists_id_members_id(ctx, list_id, subscriber_hash, extra_params)
 @lists_group.command("get-lists-id-members-id")
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_members_id(ctx, list_id, subscriber_hash, fields, exclude_fields, extra_params):
@@ -777,7 +777,7 @@ def _cmd_get_lists_id_members_id(ctx, list_id, subscriber_hash, fields, exclude_
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
 @click.option("--data", default=None, help="Request body as JSON string.")
-@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge fie")
+@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_update_lists_id_members_id(ctx, list_id, subscriber_hash, data, skip_merge_validation, extra_params):
@@ -803,7 +803,7 @@ def _cmd_update_lists_id_members_id(ctx, list_id, subscriber_hash, data, skip_me
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
 @click.option("--data", default=None, help="Request body as JSON string.")
-@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge fie")
+@click.option("--skip-merge-validation", "skip_merge_validation", default=None, type=bool, help="If skip_merge_validation is true, member data will be accepted without merge field values, even if the merge field is usually required. This defaults to false.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_update_3(ctx, list_id, subscriber_hash, data, skip_merge_validation, extra_params):
@@ -849,8 +849,8 @@ def _cmd_delete_permanent(ctx, list_id, subscriber_hash, extra_params):
 @lists_group.command("list-lists-id-members-id-activity")
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--action", "action", default=None, help="A comma seperated list of actions to return.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
@@ -877,11 +877,11 @@ def _cmd_list_lists_id_members_id_activity(ctx, list_id, subscriber_hash, fields
 @lists_group.command("list-lists-id-members-id-activity-feed")
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
-@click.option("--activity-filters", "activity_filters", default=None, help="A comma-separated list of activity filters that correspond to a set of activity ")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
+@click.option("--activity-filters", "activity_filters", default=None, help="A comma-separated list of activity filters that correspond to a set of activity types, e.g \"?activity_filters=open,bounce,click\".")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_members_id_activity_feed(ctx, list_id, subscriber_hash, fields, exclude_fields, count, offset, activity_filters, extra_params):
@@ -910,9 +910,9 @@ def _cmd_list_lists_id_members_id_activity_feed(ctx, list_id, subscriber_hash, f
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_members_id_events(ctx, list_id, subscriber_hash, count, offset, fields, exclude_fields, extra_params):
@@ -962,8 +962,8 @@ def _cmd_create_list_member_events(ctx, list_id, subscriber_hash, data, extra_pa
 @lists_group.command("list-lists-id-members-id-goals")
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_members_id_goals(ctx, list_id, subscriber_hash, fields, exclude_fields, extra_params):
@@ -990,10 +990,10 @@ def _cmd_list_lists_id_members_id_goals(ctx, list_id, subscriber_hash, fields, e
 @click.argument("SUBSCRIBER_HASH")
 @click.option("--sort-field", "sort_field", default=None, help="Returns notes sorted by the specified field.")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_lists_id_members_id_notes(ctx, list_id, subscriber_hash, sort_field, sort_dir, fields, exclude_fields, count, offset, extra_params):
@@ -1068,8 +1068,8 @@ def _cmd_delete_lists_id_members_id_notes_id(ctx, list_id, subscriber_hash, note
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
 @click.argument("NOTE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_members_id_notes_id(ctx, list_id, subscriber_hash, note_id, fields, exclude_fields, extra_params):
@@ -1118,10 +1118,10 @@ def _cmd_update_lists_id_members_id_notes_id(ctx, list_id, subscriber_hash, note
 @lists_group.command("list-list-member-tags")
 @click.argument("LIST_ID")
 @click.argument("SUBSCRIBER_HASH")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_list_member_tags(ctx, list_id, subscriber_hash, fields, exclude_fields, count, offset, extra_params):
@@ -1170,10 +1170,10 @@ def _cmd_create_list_member_tags(ctx, list_id, subscriber_hash, data, extra_para
 
 @lists_group.command("list-lists-id-merge-fields")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--type", "type_", default=None, help="The merge field type.")
 @click.option("--required", "required", default=None, type=bool, help="Whether it's a required merge field.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
@@ -1247,8 +1247,8 @@ def _cmd_delete_lists_id_merge_fields_id(ctx, list_id, merge_id, extra_params):
 @lists_group.command("get-lists-id-merge-fields-id")
 @click.argument("LIST_ID")
 @click.argument("MERGE_ID")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get_lists_id_merge_fields_id(ctx, list_id, merge_id, exclude_fields, fields, extra_params):
@@ -1295,19 +1295,19 @@ def _cmd_update_lists_id_merge_fields_id(ctx, list_id, merge_id, data, extra_par
 
 @lists_group.command("list-preview-a-segment")
 @click.argument("LIST_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--type", "type_", default=None, help="Limit results based on segment type.")
-@click.option("--since-created-at", "since_created_at", default=None, help="Restrict results to segments created after the set time. Uses ISO 8601 time form")
-@click.option("--before-created-at", "before_created_at", default=None, help="Restrict results to segments created before the set time. Uses ISO 8601 time for")
+@click.option("--since-created-at", "since_created_at", default=None, help="Restrict results to segments created after the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-created-at", "before_created_at", default=None, help="Restrict results to segments created before the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
 @click.option("--include-cleaned", "include_cleaned", default=None, type=bool, help="Include cleaned members in response")
 @click.option("--include-transactional", "include_transactional", default=None, type=bool, help="Include transactional members in response")
 @click.option("--include-unsubscribed", "include_unsubscribed", default=None, type=bool, help="Include unsubscribed members in response")
-@click.option("--since-updated-at", "since_updated_at", default=None, help="Restrict results to segments update after the set time. Uses ISO 8601 time forma")
-@click.option("--before-updated-at", "before_updated_at", default=None, help="Restrict results to segments update before the set time. Uses ISO 8601 time form")
-@click.option("--exclude-type", "exclude_type", default=None, help="Exclude results based on segment type. For example, use `exclude_type=static` to")
+@click.option("--since-updated-at", "since_updated_at", default=None, help="Restrict results to segments update after the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--before-updated-at", "before_updated_at", default=None, help="Restrict results to segments update before the set time. Uses ISO 8601 time format: 2015-10-21T15:41:36+00:00.")
+@click.option("--exclude-type", "exclude_type", default=None, help="Exclude results based on segment type. For example, use `exclude_type=static` to exclude tags from the response.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_preview_a_segment(ctx, list_id, fields, exclude_fields, count, offset, type_, since_created_at, before_created_at, include_cleaned, include_transactional, include_unsubscribed, since_updated_at, before_updated_at, exclude_type, extra_params):
@@ -1388,8 +1388,8 @@ def _cmd_delete_lists_id_segments_id(ctx, list_id, segment_id, extra_params):
 @lists_group.command("get-lists-id-segments-id")
 @click.argument("LIST_ID")
 @click.argument("SEGMENT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--include-cleaned", "include_cleaned", default=None, type=bool, help="Include cleaned members in response")
 @click.option("--include-transactional", "include_transactional", default=None, type=bool, help="Include transactional members in response")
 @click.option("--include-unsubscribed", "include_unsubscribed", default=None, type=bool, help="Include unsubscribed members in response")
@@ -1466,10 +1466,10 @@ def _cmd_create_lists_id_segments_id(ctx, list_id, segment_id, data, extra_param
 @lists_group.command("list-lists-id-segments-id-members")
 @click.argument("LIST_ID")
 @click.argument("SEGMENT_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
-@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-par")
+@click.option("--offset", "offset", default=None, type=int, help="Used for [pagination](https://mailchimp.com/developer/marketing/docs/methods-parameters/#pagination), this is the number of records from a collection to skip. Default value is 0.")
 @click.option("--include-cleaned", "include_cleaned", default=None, type=bool, help="Include cleaned members in response")
 @click.option("--include-transactional", "include_transactional", default=None, type=bool, help="Include transactional members in response")
 @click.option("--include-unsubscribed", "include_unsubscribed", default=None, type=bool, help="Include unsubscribed members in response")
@@ -1629,7 +1629,7 @@ def _cmd_get_lists_id_surveys_id(ctx, list_id, survey_id, extra_params):
 
 @lists_group.command("list-search-tags-by-name")
 @click.argument("LIST_ID")
-@click.option("--name", "name", default=None, help="The search query used to filter tags.  The search query will be compared to each")
+@click.option("--name", "name", default=None, help="The search query used to filter tags. The search query will be compared to each tag as a prefix, so all tags that have a name starting with this field will be returned.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_search_tags_by_name(ctx, list_id, name, extra_params):

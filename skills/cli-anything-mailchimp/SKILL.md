@@ -222,7 +222,7 @@ Run `cli-anything-mailchimp` with no arguments to enter the REPL:
 
 ## Notes
 
-- **Subscriber hash**: Mailchimp identifies members by the MD5 hash of their lowercased email. Compute with `python -c "import hashlib; print(hashlib.md5('email@example.com'.encode()).hexdigest())"`.
+- **Subscriber hash**: Mailchimp identifies members by the MD5 hash of their lowercased email. Compute with `python -c "import hashlib; email='email@example.com'; print(hashlib.md5(email.strip().lower().encode()).hexdigest())"`.
 - **Body payloads**: All POST/PATCH/PUT commands accept `--data '<json>'`. See [Mailchimp API docs](https://mailchimp.com/developer/marketing/api/) for the schema of each endpoint.
 - **Datacenter**: Your API key ends in `-us8`, `-eu2`, etc. The CLI extracts this automatically — include it in `MAILCHIMP_API_KEY`.
 - **Rate limits**: The Marketing API rate-limits at 10 concurrent connections and a rolling per-account limit. For bulk operations, use the `batches` group.

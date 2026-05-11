@@ -283,20 +283,6 @@ class TestOutput(unittest.TestCase):
         parsed = json.loads(captured.getvalue())
         assert parsed["key"] == "value"
 
-    def test_out_list_json(self):
-        import cli_anything.mailchimp.utils.output as out
-        import io
-
-        out.USE_JSON = True
-        captured = io.StringIO()
-        with patch("builtins.print", lambda *a, **kw: captured.write(str(a[0]) + "\n")):
-            out._out_list([{"id": "1"}, {"id": "2"}], 2)
-
-        parsed = json.loads(captured.getvalue())
-        assert parsed["total_items"] == 2
-        assert len(parsed["results"]) == 2
-
-
 # ── smoke import tests ────────────────────────────────────────────────
 
 
@@ -314,6 +300,19 @@ class TestGeneratedCommandsImport(unittest.TestCase):
         for group in ALL_GROUPS:
             assert group.name is not None
             assert len(group.commands) > 0, f"Group {group.name!r} has no commands"
+
+    def test_generator_preserves_complete_first_line_help(self):
+        from cli_anything.mailchimp._codegen.generate import _click_help_text
+
+        description = (
+            "Used for [pagination](https://mailchimp.com/developer/marketing/docs/fundamentals/#pagination) "
+            "with enough context to exceed eighty characters.\nSecond line omitted."
+        )
+
+        help_text = _click_help_text(description)
+
+        assert help_text.endswith("eighty characters.")
+        assert "\n" not in help_text
 
     def test_no_builtin_shadowing_in_function_names(self):
         """Ensure generated functions are prefixed with _cmd_ (not builtins)."""

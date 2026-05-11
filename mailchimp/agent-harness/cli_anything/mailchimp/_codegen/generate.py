@@ -119,6 +119,12 @@ def _param_type_to_click(param: dict) -> str:
     return "str"
 
 
+def _click_help_text(description: str) -> str:
+    """Return a single-line Click help string without truncating useful API context."""
+    first_line = description.split("\n")[0]
+    return " ".join(first_line.replace('"', '\\"').split())
+
+
 def _collect_params(operation: dict, path: str) -> tuple[list[dict], list[dict], dict | None]:
     """Return (path_params, query_params, body_param) from operation."""
     params = operation.get("parameters", [])
@@ -164,7 +170,7 @@ def _generate_command_func(
         flag = _slugify(p["name"])
         py_name = _safe_name(p["name"]).lower()
         ptype = _param_type_to_click(p)
-        desc = p.get("description", "").replace('"', '\\"').split("\n")[0][:80]
+        desc = _click_help_text(p.get("description", ""))
         if ptype == "int":
             type_clause = "type=int, "
         elif ptype == "bool":

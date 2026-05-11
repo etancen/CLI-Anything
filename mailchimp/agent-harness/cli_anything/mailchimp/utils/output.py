@@ -22,17 +22,6 @@ def _out(data: Any) -> None:
         print(data)
 
 
-def _out_list(items: list, total: int) -> None:
-    """Print a list response envelope."""
-    if USE_JSON:
-        print(json.dumps({"results": items, "total_items": total}, indent=2, default=str))
-    else:
-        print(f"  {total} item(s) total\n")
-        for item in items:
-            _print_dict(item)
-            print()
-
-
 def _out_ok(message: str, data: dict | None = None) -> None:
     """Print a success/mutation result.
 

@@ -30,8 +30,8 @@ def landing_pages_group(ctx):
 @landing_pages_group.command("list")
 @click.option("--sort-dir", "sort_dir", default=None, help="Determines the order direction for sorted results.")
 @click.option("--sort-field", "sort_field", default=None, help="Returns files sorted by the specified field.")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--count", "count", default=None, type=int, help="The number of records to return. Default value is 10. Maximum value is 1000")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
@@ -59,7 +59,7 @@ def _cmd_list_(ctx, sort_dir, sort_field, fields, exclude_fields, count, extra_p
 
 @landing_pages_group.command("create")
 @click.option("--data", default=None, help="Request body as JSON string.")
-@click.option("--use-default-list", "use_default_list", default=None, type=bool, help="Will create the Landing Page using the account's Default List instead of requiri")
+@click.option("--use-default-list", "use_default_list", default=None, type=bool, help="Will create the Landing Page using the account's Default List instead of requiring a list_id.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_create(ctx, data, use_default_list, extra_params):
@@ -103,8 +103,8 @@ def _cmd_delete(ctx, page_id, extra_params):
 
 @landing_pages_group.command("get")
 @click.argument("PAGE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_get(ctx, page_id, fields, exclude_fields, extra_params):
@@ -190,8 +190,8 @@ def _cmd_unpublish(ctx, page_id, extra_params):
 
 @landing_pages_group.command("list-landing-page-id-content")
 @click.argument("PAGE_ID")
-@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects ")
-@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects")
+@click.option("--fields", "fields", default=None, help="A comma-separated list of fields to return. Reference parameters of sub-objects with dot notation.")
+@click.option("--exclude-fields", "exclude_fields", default=None, help="A comma-separated list of fields to exclude. Reference parameters of sub-objects with dot notation.")
 @click.option("--extra-params", default=None, help="Extra query params as JSON object, e.g. '{\"key\":\"val\"}'")
 @click.pass_context
 def _cmd_list_landing_page_id_content(ctx, page_id, fields, exclude_fields, extra_params):
