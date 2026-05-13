@@ -37,7 +37,8 @@ pip install cli-anything-rekordbox[windows]
 cli-anything-rekordbox library count
 cli-anything-rekordbox library search "Daft Punk"
 
-# Create + populate a playlist
+# Create + populate a playlist. Writes back up master.db first and refuse to run
+# while Rekordbox is open unless --force is supplied.
 cli-anything-rekordbox playlist create "MyMix"
 cli-anything-rekordbox playlist add "MyMix" --track-title "Track A"
 cli-anything-rekordbox playlist add "MyMix" --track-title "Track B"
@@ -68,17 +69,14 @@ cli-anything-rekordbox
 | Command | Description |
 |---------|-------------|
 | `list` | Show all playlists |
-| `create NAME` | Create new playlist |
-| `delete NAME` | Delete playlist |
-| `add NAME --track-title T` | Add track by title |
-| `clear NAME` | Empty a playlist |
+| `create NAME [--force] [--no-backup]` | Create new playlist |
+| `add NAME --track-title T [--force] [--no-backup]` | Add track by title |
+| `clear NAME [--force] [--no-backup]` | Empty a playlist |
 
-### `cue`
-| Command | Description |
-|---------|-------------|
-| `list TRACK_ID` | List all cue points |
-| `set TRACK_ID --ms N --color HEX` | Add a cue at offset |
-| `hot TRACK_ID --slot N --ms M` | Set hot cue |
+Playlist writes create timestamped backups under `master.db`'s sibling
+`cli-anything-backups/` directory before mutation. If Rekordbox is running, the
+CLI refuses to write by default; `--force` acknowledges that risk but still
+requires a backup. `--no-backup` is only accepted when Rekordbox is closed.
 
 ### `deck` (live MIDI)
 | Command | Description |
@@ -135,7 +133,7 @@ $ cli-anything-rekordbox --json library search "Daft Punk"
 ## Notes & caveats
 
 - **SQLCipher key** is auto-extracted by pyrekordbox from rekordbox.exe (the static rekordbox 6/7 master key, hardcoded across all installs).
-- **Library writes** require either rekordbox closed OR bypassing pyrekordbox's running-rekordbox safety check (this CLI does the latter via `db.session.commit()` directly).
+- **Library writes** require Rekordbox to be closed by default. Forced writes with `--force` are explicit, backed up first, and should be reserved for recovery/test workflows.
 - **Live-deck control** depends on the user mapping the virtual MIDI port in rekordbox `Preferences → Controller → MIDI` (one-time UI step). The harness ships `Bunker.midi.csv` and an `install-mapping` command to drop it into the right folder.
 - **Pioneer offers no playback REST API.** This is the closest thing.
 

@@ -13,6 +13,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -43,7 +44,7 @@ def _emit(ctx: click.Context, payload):
 
 
 def _open_db():
-    """Open rekordbox master.db. Bypasses 'rekordbox is running' safety on commits."""
+    """Open rekordbox master.db."""
     try:
         from pyrekordbox import Rekordbox6Database
     except ImportError:
@@ -53,8 +54,85 @@ def _open_db():
     return Rekordbox6Database(unlock=True)
 
 
-def _commit_force(db):
-    """Bypass pyrekordbox's running-rekordbox check."""
+def _is_rekordbox_running() -> bool:
+    """Best-effort process check using only the Python standard library."""
+    override = os.environ.get("CLI_ANYTHING_REKORDBOX_RUNNING")
+    if override is not None:
+        return override.strip().lower() in {"1", "true", "yes", "on"}
+
+    try:
+        if sys.platform == "win32":
+            result = subprocess.run(
+                ["tasklist", "/FI", "IMAGENAME eq rekordbox.exe", "/FO", "CSV", "/NH"],
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            return "rekordbox.exe" in result.stdout.lower()
+
+        names = ["rekordbox", "Rekordbox"]
+        for name in names:
+            result = subprocess.run(["pgrep", "-x", name], capture_output=True, check=False)
+            if result.returncode == 0:
+                return True
+    except (FileNotFoundError, OSError):
+        pass
+
+    try:
+        result = subprocess.run(["ps", "-A", "-o", "comm="], capture_output=True, text=True, check=False)
+    except (FileNotFoundError, OSError):
+        return False
+    return any(line.strip().lower() == "rekordbox" for line in result.stdout.splitlines())
+
+
+def _db_path(db) -> Path:
+    path = getattr(getattr(db, "engine", None), "url", None)
+    database = getattr(path, "database", None)
+    if not database:
+        raise click.ClickException("Could not determine rekordbox master.db path for backup")
+    return Path(database).expanduser()
+
+
+def _backup_database(db) -> list[str]:
+    """Copy master.db and SQLite sidecars before mutation."""
+    db_path = _db_path(db)
+    if not db_path.exists():
+        raise click.ClickException(f"Cannot back up missing database: {db_path}")
+
+    backup_dir = db_path.parent / "cli-anything-backups"
+    backup_dir.mkdir(parents=True, exist_ok=True)
+    stamp = time.strftime("%Y%m%d-%H%M%S")
+    copied = []
+
+    for src in [db_path, Path(f"{db_path}-wal"), Path(f"{db_path}-shm")]:
+        if not src.exists():
+            continue
+        dst = backup_dir / f"{src.name}.{stamp}.bak"
+        shutil.copy2(src, dst)
+        copied.append(str(dst))
+
+    if not copied:
+        raise click.ClickException(f"No database files were backed up for {db_path}")
+    return copied
+
+
+def _open_db_for_write(*, force: bool, backup: bool, operation: str):
+    running = _is_rekordbox_running()
+    if running and not force:
+        raise click.ClickException(
+            f"Refusing to {operation} while Rekordbox is running. Close Rekordbox first, "
+            "or rerun with --force to acknowledge the risk. Forced writes still create a backup."
+        )
+    if running and not backup:
+        raise click.ClickException("Refusing forced write while Rekordbox is running without a backup")
+
+    db = _open_db()
+    backup_paths = _backup_database(db) if backup else []
+    return db, {"backup": backup_paths, "rekordbox_running": running, "forced": force}
+
+
+def _commit_db_write(db):
+    """Commit a guarded DB write after the caller has checked process state and backed up."""
     db.registry.autoincrement_local_update_count(set_row_usn=True)
     db.session.commit()
     db.registry.clear_buffer()
@@ -203,25 +281,30 @@ def playlist_list(ctx):
 
 @playlist.command("create")
 @click.argument("name")
+@click.option("--force", is_flag=True, help="Allow write while Rekordbox is running after creating a backup.")
+@click.option("--no-backup", is_flag=True, help="Skip the pre-write master.db backup when Rekordbox is closed.")
 @click.pass_context
-def playlist_create(ctx, name: str):
+def playlist_create(ctx, name: str, force: bool, no_backup: bool):
     """Create a new playlist."""
     db = _open_db()
     existing = [p for p in db.get_playlist() if p.Name == name]
     if existing:
         _emit(ctx, {"playlist": name, "id": existing[0].ID, "status": "already exists"})
         return
+    db, safety = _open_db_for_write(force=force, backup=not no_backup, operation=f"create playlist {name!r}")
     pl = db.create_playlist(name)
-    _commit_force(db)
-    _emit(ctx, {"playlist": name, "id": pl.ID, "status": "created"})
+    _commit_db_write(db)
+    _emit(ctx, {"playlist": name, "id": pl.ID, "status": "created", **safety})
 
 
 @playlist.command("add")
 @click.argument("playlist_name")
 @click.option("--track-title", required=True, help="Track title to search + add")
 @click.option("--track-id", type=int, help="Track ID (skips title search)")
+@click.option("--force", is_flag=True, help="Allow write while Rekordbox is running after creating a backup.")
+@click.option("--no-backup", is_flag=True, help="Skip the pre-write master.db backup when Rekordbox is closed.")
 @click.pass_context
-def playlist_add(ctx, playlist_name: str, track_title: str, track_id: Optional[int]):
+def playlist_add(ctx, playlist_name: str, track_title: str, track_id: Optional[int], force: bool, no_backup: bool):
     """Add a track to a playlist."""
     db = _open_db()
     pl = next((p for p in db.get_playlist() if p.Name == playlist_name), None)
@@ -233,17 +316,33 @@ def playlist_add(ctx, playlist_name: str, track_title: str, track_id: Optional[i
         track = next((c for c in db.get_content() if c.Title and track_title.lower() in c.Title.lower()), None)
     if not track:
         raise click.ClickException(f"track not found")
+    db, safety = _open_db_for_write(force=force, backup=not no_backup, operation=f"add track to playlist {playlist_name!r}")
+    pl = next((p for p in db.get_playlist() if p.Name == playlist_name), None)
+    if not pl:
+        raise click.ClickException(f"playlist {playlist_name!r} not found")
+    track = next((c for c in db.get_content() if c.ID == track_id), None) if track_id else next(
+        (c for c in db.get_content() if c.Title and track_title.lower() in c.Title.lower()),
+        None,
+    )
+    if not track:
+        raise click.ClickException("track not found")
     db.add_to_playlist(pl, track)
-    _commit_force(db)
-    _emit(ctx, {"playlist": playlist_name, "added_track_id": track.ID, "title": track.Title})
+    _commit_db_write(db)
+    _emit(ctx, {"playlist": playlist_name, "added_track_id": track.ID, "title": track.Title, **safety})
 
 
 @playlist.command("clear")
 @click.argument("name")
+@click.option("--force", is_flag=True, help="Allow write while Rekordbox is running after creating a backup.")
+@click.option("--no-backup", is_flag=True, help="Skip the pre-write master.db backup when Rekordbox is closed.")
 @click.pass_context
-def playlist_clear(ctx, name: str):
+def playlist_clear(ctx, name: str, force: bool, no_backup: bool):
     """Remove all tracks from a playlist."""
     db = _open_db()
+    pl = next((p for p in db.get_playlist() if p.Name == name), None)
+    if not pl:
+        raise click.ClickException(f"playlist {name!r} not found")
+    db, safety = _open_db_for_write(force=force, backup=not no_backup, operation=f"clear playlist {name!r}")
     pl = next((p for p in db.get_playlist() if p.Name == name), None)
     if not pl:
         raise click.ClickException(f"playlist {name!r} not found")
@@ -251,8 +350,8 @@ def playlist_clear(ctx, name: str):
     for sp in list(pl.Songs):
         db.remove_from_playlist(pl, sp)
         n += 1
-    _commit_force(db)
-    _emit(ctx, {"playlist": name, "removed": n})
+    _commit_db_write(db)
+    _emit(ctx, {"playlist": name, "removed": n, **safety})
 
 
 # ---------------------------------------------------------------- deck (MIDI)

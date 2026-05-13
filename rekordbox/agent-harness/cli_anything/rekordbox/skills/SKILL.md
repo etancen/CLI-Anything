@@ -1,7 +1,7 @@
 ---
 name: "cli-anything-rekordbox"
 description: >-
-  Command-line interface for Pioneer Rekordbox 6/7 - DJ library and live-deck control via direct SQLCipher master.db access (pyrekordbox) + virtual MIDI mapping. Provides library inspection, playlist CRUD, cue/hot-cue management, and live-deck mixing (play/sync/crossfade/EQ). Pioneer ships no playback REST API; this harness combines the only two real surfaces (encrypted DB + MIDI) into one agent-native CLI.
+  Command-line interface for Pioneer Rekordbox 6/7 - DJ library and live-deck control via guarded SQLCipher master.db access (pyrekordbox) + virtual MIDI mapping. Provides library inspection, playlist creation/add/clear, and live-deck mixing (play/sync/crossfade/EQ). Pioneer ships no playback REST API; this harness combines the only two real surfaces (encrypted DB + MIDI) into one agent-native CLI.
 ---
 
 # cli-anything-rekordbox
@@ -49,9 +49,13 @@ cli-anything-rekordbox --json library search "Daft Punk"
 | Command | Description |
 |---------|-------------|
 | `list` | All playlists |
-| `create NAME` | New playlist |
-| `add NAME --track-title T` | Add track |
-| `clear NAME` | Empty a playlist |
+| `create NAME [--force] [--no-backup]` | New playlist |
+| `add NAME --track-title T [--force] [--no-backup]` | Add track |
+| `clear NAME [--force] [--no-backup]` | Empty a playlist |
+
+Playlist writes create a `master.db` backup before mutation. They refuse to run
+while Rekordbox is open unless `--force` is supplied; forced writes still require
+a backup. `--no-backup` is only accepted when Rekordbox is closed.
 
 ### Deck (live MIDI)
 | Command | Description |

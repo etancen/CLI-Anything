@@ -30,5 +30,9 @@ cli-anything-rekordbox install-mapping
 cli-anything-rekordbox deck crossfade 1 2 --secs 16
 ```
 
+Playlist writes are guarded: the CLI creates a `master.db` backup before
+mutation and refuses to write while Rekordbox is running unless `--force` is
+provided. `--no-backup` is only accepted when Rekordbox is closed.
+
 ## License
 MIT
