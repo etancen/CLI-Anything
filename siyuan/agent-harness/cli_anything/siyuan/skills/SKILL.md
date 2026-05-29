@@ -73,8 +73,21 @@ documents, blocks, search, and export.
 # List notebooks (JSON)
 cli-anything-siyuan --json notebook list
 
-# Create a document with Markdown (use --md flag)
+# Create a document with Markdown (--md flag, watch shell escaping)
 cli-anything-siyuan doc create nb1 /projects/new --md "## Title\n\nContent"
+
+# Create a document — pipe Markdown via stdin (avoids shell escaping)
+# PowerShell here-string (literal, no escaping needed):
+@'
+## Title
+Content with `backticks` and (parentheses) and "quotes"
+'@ | cli-anything-siyuan doc create nb1 /projects/new --md -
+
+# Bash heredoc:
+# cat <<'EOF' | cli-anything-siyuan doc create nb1 /projects/new --md -
+# ## Title
+# Content with `backticks` and (parentheses)
+# EOF
 
 # SQL search
 cli-anything-siyuan sql "SELECT id, content FROM blocks WHERE content LIKE '%meeting%' LIMIT 5"

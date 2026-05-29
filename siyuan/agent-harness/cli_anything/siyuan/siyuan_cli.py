@@ -455,10 +455,17 @@ def doc():
 @doc.command("create")
 @click.argument("notebook_id")
 @click.argument("path")
-@click.option("--md", default="", help="Markdown content")
+@click.option("--md", default="", help="Markdown content. Use '-' or omit to read from stdin.")
 @click.pass_obj
 def doc_create(ctx: SiYuanContext, notebook_id: str, path: str, md: str):
-    """Create a document with optional Markdown content."""
+    """Create a document with optional Markdown content.
+
+    To avoid shell escaping issues with special characters
+    (backticks, quotes, parentheses), pipe Markdown via stdin:
+      echo "## Title" | sy doc create nb1 /test --md -
+    """
+    if not md or md == "-":
+        md = click.get_text_stream("stdin").read()
     doc_id = ctx.client.create_doc_with_md(notebook_id, path, md)
     if ctx.json_output:
         click.echo(json.dumps({"id": doc_id}, ensure_ascii=False))
