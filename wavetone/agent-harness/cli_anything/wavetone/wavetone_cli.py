@@ -67,7 +67,10 @@ def cli(ctx: click.Context, project_path: str | None, json_mode: bool) -> None:
         ctx.obj["project"] = project_path
     else:
         ctx.obj.setdefault("project", None)
-    ctx.obj["json"] = json_mode
+    if json_mode:
+        ctx.obj["json"] = True
+    else:
+        ctx.obj.setdefault("json", False)
     if ctx.invoked_subcommand is None:
         ctx.invoke(repl)
 

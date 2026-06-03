@@ -114,14 +114,14 @@ def test_find_wavetone_from_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch)
     assert wavetone_backend.find_wavetone() == fake.resolve()
 
 
-def test_cli_preserves_inherited_project_context(tmp_path: Path) -> None:
+def test_cli_preserves_inherited_project_and_json_context(tmp_path: Path) -> None:
     wav = make_wav(tmp_path / "tone.wav")
     project_path = save_project(create_project(wav), tmp_path / "tone.wt.json")
 
     result = CliRunner().invoke(
         cli,
-        ["--json", "audio", "probe"],
-        obj={"project": str(project_path), "json": False},
+        ["audio", "probe"],
+        obj={"project": str(project_path), "json": True},
     )
 
     assert result.exit_code == 0, result.output

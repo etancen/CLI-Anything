@@ -288,7 +288,6 @@ class ReplSkin:
         Returns:
             list of (style, text) tuples for prompt_toolkit.
         """
-        accent_hex = _ANSI_256_TO_HEX.get(self.accent, "#5fafff")
         tokens = []
 
         tokens.append(("class:icon", "◆ "))
@@ -493,7 +492,6 @@ class ReplSkin:
             from prompt_toolkit import PromptSession
             from prompt_toolkit.history import FileHistory
             from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
-            from prompt_toolkit.formatted_text import FormattedText
 
             style = self.get_prompt_style()
 
